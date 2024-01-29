@@ -7,7 +7,7 @@ const StockChart = ({ ticker }) => {
   const [chartData, setChartData] = useState({});
   const [interval, setInterval] = useState('1day'); // Default interval is daily
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(null); // Store error message
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -16,6 +16,11 @@ const StockChart = ({ ticker }) => {
         const response = await axios.get(
           `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=${apiKey}`
         );
+
+        // Check if the API returned an error
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message);
+        }
 
         const data = response.data.values.reverse();
         const chartLabels = data.map(item => item.datetime);
@@ -33,11 +38,16 @@ const StockChart = ({ ticker }) => {
             },
           ],
         });
-        setError(false);
+        setError(null); // Clear any previous error
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock data:', error);
-        setError(true);
+        if (error.message.includes('You have run out of API')) {
+          setError('Max API call limit reached, please try again in 1 minute!');
+        }
+        else {
+          setError('Error fetching stock data. Make sure valid ticket is provided.');
+        }
         setLoading(false);
       }
     };
@@ -49,7 +59,7 @@ const StockChart = ({ ticker }) => {
 
   return (
     <div>
-      <h3>Stock Price for {ticker}</h3>
+      <h3>Stock Graph</h3>
       {/* Add interval selector */}
       <select
         value={interval}
@@ -61,10 +71,11 @@ const StockChart = ({ ticker }) => {
         <option value="1day">Daily</option>
         <option value="1week">Weekly</option>
       </select>
+
       {loading ? (
         <p>Loading chart data...</p>
       ) : error ? (
-        <p>Error loading stock data.</p>
+        <p>{error}</p>
       ) : (
         <Line
           data={chartData}

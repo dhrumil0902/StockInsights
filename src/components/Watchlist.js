@@ -20,7 +20,7 @@ const Watchlist = ({ onSelectTicker }) => {
     if (watchlist.length > 0) {
       localStorage.setItem('watchlist', JSON.stringify(watchlist));
     }
-  }, [watchlist]); // Watch for changes in the watchlist
+  }, [watchlist]);
 
   // Fetch stock price for a ticker (current and previous day)
   const fetchStockPrice = async (ticker) => {
@@ -48,17 +48,12 @@ const Watchlist = ({ onSelectTicker }) => {
     }
   };
 
-  // Fetch stock prices for all tickers in the watchlist
-  useEffect(() => {
-    watchlist.forEach((ticker) => {
-      fetchStockPrice(ticker);
-    });
-  }, [watchlist]);
-
-  // Add a stock to the watchlist
+  // Add a stock to the watchlist and fetch its price
   const addTicker = () => {
-    if (tickerInput && !watchlist.includes(tickerInput.toUpperCase())) {
-      setWatchlist([...watchlist, tickerInput.toUpperCase()]);
+    const upperTicker = tickerInput.toUpperCase();
+    if (upperTicker && !watchlist.includes(upperTicker)) {
+      setWatchlist((prevWatchlist) => [...prevWatchlist, upperTicker]); // Add to watchlist
+      fetchStockPrice(upperTicker); // Fetch price only for the added ticker
       setTickerInput(''); // Clear input after adding
     }
   };
@@ -73,69 +68,79 @@ const Watchlist = ({ onSelectTicker }) => {
     setPrices(updatedPrices); // Remove the price when the ticker is removed
   };
 
+  // Handle pressing Enter to add the ticker
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      addTicker();
+    }
+  };
+
   return (
-<div className="watchlist-container">
-  <h3>My Watchlist</h3>
-  <div className="input-container">
-    <input
-      type="text"
-      value={tickerInput}
-      onChange={(e) => setTickerInput(e.target.value)}
-      placeholder="Enter stock ticker"
-    />
-    <button className="add-to-watchlist" onClick={addTicker}>Add</button>
-  </div>
+    <div className="watchlist-container">
+      <h3>My Watchlist</h3>
+      <div className="input-container">
+        <input
+          type="text"
+          value={tickerInput}
+          onChange={(e) => setTickerInput(e.target.value)}
+          onKeyPress={handleKeyPress} // Add the stock when Enter is pressed
+          placeholder="Enter stock ticker"
+        />
+        <button className="add-to-watchlist" onClick={addTicker}>
+          Add
+        </button>
+      </div>
 
-  {watchlist.length > 0 ? (
-    <ul>
-      {watchlist.map((ticker, index) => {
-        const priceData = prices[ticker];
-        let priceColor = 'black';
-        if (priceData) {
-          priceColor = priceData.currentPrice > priceData.previousPrice ? 'green' : 'red';
-        }
+      {watchlist.length > 0 ? (
+        <ul>
+          {watchlist.map((ticker, index) => {
+            const priceData = prices[ticker];
+            let priceColor = 'black';
+            if (priceData) {
+              priceColor =
+                priceData.currentPrice > priceData.previousPrice ? 'green' : 'red';
+            }
 
-        return (
-          <li
-            key={index}
-            className="watchlist-item"
-            onClick={() => onSelectTicker(ticker)}
-            style={{
-              cursor: 'pointer',
-              padding: '10px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <span>{ticker}</span>
-            <span
-              style={{
-                marginLeft: 'auto',
-                marginRight: '10px',
-                color: priceData ? priceColor : 'black',
-              }}
-            >
-              {priceData ? `$${priceData.currentPrice.toFixed(2)}` : 'Not Found'}
-            </span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removeTicker(ticker);
-              }}
-            >
-              Remove
-            </button>
-          </li>
-        );
-      })}
-    </ul>
-  ) : (
-    <p>Your watchlist is empty.</p>
-  )}
-</div>
-
-
-
+            return (
+              <li
+                key={index}
+                className="watchlist-item"
+                onClick={() => onSelectTicker(ticker)}
+                style={{
+                  cursor: 'pointer',
+                  padding: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <span>{ticker}</span>
+                <span
+                  style={{
+                    marginLeft: 'auto',
+                    marginRight: '10px',
+                    color: priceData ? priceColor : 'black',
+                  }}
+                >
+                  {priceData
+                    ? `$${priceData.currentPrice.toFixed(2)}`
+                    : 'Not Found'}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeTicker(ticker);
+                  }}
+                >
+                  Remove
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>Your watchlist is empty.</p>
+      )}
+    </div>
   );
 };
 

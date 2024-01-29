@@ -84,7 +84,7 @@ const RedditThreads = ({ ticker }) => {
           <option value="new">Most Recent</option>
         </select>
         &nbsp; {/* Added non-breaking space here */}
-        Reddit Threads for {ticker}
+        Reddit Threads Related to ${ticker}
       </h3>
 
       {loading && <p>Loading threads...</p>}

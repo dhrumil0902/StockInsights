@@ -8,35 +8,31 @@ const StockNews = React.lazy(() => import('./components/StockNews'));
 const RedditThreads = React.lazy(() => import('./components/RedditThreads'));
 
 const App = () => {
+  // State to manage the actual ticker used in search
   const [ticker, setTicker] = useState(() => {
     return localStorage.getItem('selectedTicker') || 'TSLA'; // Default to 'TSLA'
   });
-  
-  const [inputTicker, setInputTicker] = useState(ticker); // Input state
 
-  // Retrieve the ticker from localStorage when the app loads
+  // State to manage the input field value
+  const [inputValue, setInputValue] = useState(ticker);
+
   useEffect(() => {
     const savedTicker = localStorage.getItem('selectedTicker');
     if (savedTicker) {
       setTicker(savedTicker);
-      setInputTicker(savedTicker); // Keep input synced
+      setInputValue(savedTicker); // Sync the input value with the saved ticker
     }
   }, []);
 
-  // Save the selected ticker to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('selectedTicker', ticker);
   }, [ticker]);
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    setInputTicker(e.target.value.toUpperCase()); // Keep the input uppercase
-  };
-
-  // Handle form submission (pressing Enter)
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      setTicker(inputTicker); // Set ticker to input value on Enter press
+  // Handle search submission (only update ticker on submission)
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (inputValue.trim()) {
+      setTicker(inputValue.toUpperCase()); // Set ticker only when "Enter" is pressed or search is clicked
     }
   };
 
@@ -44,15 +40,17 @@ const App = () => {
     <div className="app-container">
       <header>
         <h1>Stock Dashboard for {ticker}</h1>
-        <input
-          type="text"
-          value={inputTicker}
-          onChange={handleInputChange} // Update the input state
-          onKeyPress={handleKeyPress} // Trigger search on Enter press
-          placeholder="Enter ticker"
-          className="ticker-input"
-          style={{ textTransform: 'uppercase' }}
-        />
+        <form onSubmit={handleSearch}>
+          <input
+            type="text"
+            value={inputValue} // Bind the input value to inputValue state
+            onChange={(e) => setInputValue(e.target.value.toUpperCase())} // Update input field as user types (uppercase)
+            placeholder="Enter stock ticker"
+            className="ticker-input"
+            style={{ textTransform: 'uppercase' }} // Ensure the input shows uppercase
+          />
+          <button type="submit">Search</button>
+        </form>
       </header>
 
       <div className="dashboard">
@@ -61,18 +59,19 @@ const App = () => {
         </div>
 
         <div className="chart-container">
-          <StockChart ticker={ticker} /> {/* Fetch chart data only when ticker is set */}
+          <StockChart ticker={ticker} />
         </div>
 
+        {/* Suspense for lazy-loaded components */}
         <Suspense fallback={<div>Loading Reddit threads...</div>}>
           <div className="reddit-threads-container">
-            <RedditThreads ticker={ticker} /> {/* Fetch Reddit data only when ticker is set */}
+            <RedditThreads ticker={ticker} />
           </div>
         </Suspense>
 
         <Suspense fallback={<div>Loading news...</div>}>
           <div className="news-container">
-            <StockNews ticker={ticker} /> {/* Fetch news only when ticker is set */}
+            <StockNews ticker={ticker} />
           </div>
         </Suspense>
       </div>
