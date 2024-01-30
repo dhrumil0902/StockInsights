@@ -49,7 +49,7 @@ const App = () => {
             className="ticker-input"
             style={{ textTransform: 'uppercase' }} // Ensure the input shows uppercase
           />
-          <button type="submit">Search</button>
+          <button type="submit">🔍</button>
         </form>
       </header>
 

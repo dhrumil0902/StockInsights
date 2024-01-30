@@ -14,8 +14,8 @@ const StockChart = ({ ticker }) => {
       const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Replace with your Twelve Data API key
       try {
         const response = await axios.get(
-          `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&apikey=${apiKey}`
-        );
+          `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&outputsize=500&apikey=${apiKey}`
+        );  // Increase outputsize to 500 for more historical data
 
         // Check if the API returned an error
         if (response.data.status === 'error') {
@@ -35,6 +35,8 @@ const StockChart = ({ ticker }) => {
               borderColor: 'rgba(75, 192, 192, 1)',
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               borderWidth: 2,
+              pointHoverRadius: 5, // Increase point size on hover
+              pointHitRadius: 10, // Increase click area for points
             },
           ],
         });
@@ -46,7 +48,7 @@ const StockChart = ({ ticker }) => {
           setError('Max API call limit reached, please try again in 1 minute!');
         }
         else {
-          setError('Error fetching stock data. Make sure valid ticket is provided.');
+          setError('Error fetching stock data. Make sure valid ticker is provided.');
         }
         setLoading(false);
       }
@@ -89,6 +91,39 @@ const StockChart = ({ ticker }) => {
                   unit: interval === '5min' ? 'minute' : interval === '4h' ? 'hour' : 'day',
                 },
               },
+            },
+            plugins: {
+              tooltip: {
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                  label: function (context) {
+                    const label = context.dataset.label || '';
+                    const value = context.raw || 0;
+                    return `${label}: $${value.toFixed(2)}`;
+                  },
+                },
+              },
+              zoom: {
+                pan: {
+                  enabled: true,
+                  mode: 'xy',
+                },
+                zoom: {
+                  wheel: {
+                    enabled: true,
+                  },
+                  pinch: {
+                    enabled: true,
+                  },
+                  mode: 'xy',
+                },
+              },
+            },
+            interaction: {
+              mode: 'nearest', // Display the nearest point tooltip
+              axis: 'x',
+              intersect: false, // Tooltip displays for the nearest point without intersecting
             },
           }}
           height={400} // Set a specific height
