@@ -1,93 +1,86 @@
-.watchlist-container {
-  flex-grow: 1; /* Allow this area to grow and take up available space */
-  overflow-y: auto; /* Only this area will scroll */
-  max-height: 400px; /* Limit height */
-}
-
+/* Center the heading text */
 .watchlist-container h3 {
-  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-  .watchlist-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-  }
+/* Input and button container */
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
 
-  ul {
-    list-style-type: none; /* Remove default bullet points */
-    padding: 0;            /* Remove padding */
-    margin: 0;             /* Remove margin */
-  }
-  
-  .watchlist-item span {
-    margin-right: 10px;
-  }
-  
-  .watchlist-item .price {
-    display: flex;
-    align-items: center;
-    color: black;
-  }
-  
-  .price-value {
-    margin-right: 5px;
-  }
-  
-  .price-change {
-    margin-left: 10px;
-  }
-  
-  button {
-    background-color: #ffffff;
-    border: none;
-    padding: 5px 5px;
-    border-radius: 3px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  input[type="text"] {
-    padding: 8px;
-    width: 150px;
-    margin-right: 10px;
-  }
-  
-  button.add-to-watchlist {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button.add-to-watchlist:hover {
-    background-color: #0056b3;
-  }
+.scrollable-ticker-container {
+  max-height: 460px; /* Set the height of the scrollable container */
+  overflow-y: auto; /* Enable scrolling when content overflows */
+}
 
-  .input-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .input-container input {
-    flex-grow: 1;
-    padding: 8px;
-    margin-right: 10px; /* Add some space between input and button */
-  }
-  
-  button.add-to-watchlist {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  
-  
+/* Input field styling */
+.input-container input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 200px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+/* Add-to-watchlist button */
+button.add-to-watchlist {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.add-to-watchlist:hover {
+  background-color: #0056b3;
+}
+
+
+/* Change background on hover */
+.watchlist-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Remove button for each item */
+.watchlist-item button {
+  background-color: #f41a1a;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+}
+
+.watchlist-item button:hover {
+  background-color: #d00;
+}
+
+/* Color for stock prices */
+.watchlist-item span {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+/* Change the price color based on positive or negative */
+.watchlist-item .price-positive {
+  color: green;
+}
+
+.watchlist-item .price-negative {
+  color: red;
+}
+
+p {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 16px;
+}

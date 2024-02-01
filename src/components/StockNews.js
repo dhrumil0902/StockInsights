@@ -41,7 +41,7 @@ const StockNews = ({ ticker }) => {
 
   return (
     <div style={styles.newsWrapper}>
-      {ticker && <h3>Latest News</h3>}
+      {ticker && <h3 style={{ textAlign: 'center', justifyContent: "center" }}>Latest News</h3>}
       {loading ? (
         <p>Loading news...</p>
       ) : error ? (

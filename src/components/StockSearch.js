@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import './../App.css'
 const StockSearch = ({ onSearch }) => {
   // State for the actual ticker (used for search)
   const [ticker, setTicker] = useState(() => {
@@ -35,7 +35,7 @@ const StockSearch = ({ onSearch }) => {
           placeholder="Enter stock ticker"
           style={{ textTransform: 'uppercase' }} // Visually ensure uppercase
         />
-        <button type="submit">🔍bv</button>
+        <button type="submit">🔍</button>
       </form>
     </div>
   );

@@ -13,6 +13,13 @@ const Watchlist = ({ onSelectTicker }) => {
   useEffect(() => {
     const savedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
     setWatchlist(savedWatchlist);
+
+    // Fetch stock prices for all tickers in the watchlist
+    if (savedWatchlist.length > 0) {
+      savedWatchlist.forEach(ticker => {
+        fetchStockPrice(ticker); // Fetch stock prices for each saved ticker
+      });
+    }
   }, []); // Empty dependency array to run this only on component mount
 
   // Save watchlist to localStorage whenever it changes
@@ -37,7 +44,7 @@ const Watchlist = ({ onSelectTicker }) => {
           [ticker]: { currentPrice, previousPrice }, // Store both prices
         }));
       } else {
-        throw new Error("No data found");
+        throw new Error('No data found');
       }
     } catch (error) {
       console.error('Error fetching stock price:', error);
@@ -77,7 +84,7 @@ const Watchlist = ({ onSelectTicker }) => {
 
   return (
     <div className="watchlist-container">
-      <h3>My Watchlist</h3>
+      <h3 style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center' }}>My Watchlist</h3>
       <div className="input-container">
         <input
           type="text"
@@ -91,52 +98,64 @@ const Watchlist = ({ onSelectTicker }) => {
         </button>
       </div>
 
+      {/* Scrollable container for tickers */}
       {watchlist.length > 0 ? (
-        <ul>
-          {watchlist.map((ticker, index) => {
-            const priceData = prices[ticker];
-            let priceColor = 'black';
-            if (priceData) {
-              priceColor =
-                priceData.currentPrice > priceData.previousPrice ? 'green' : 'red';
-            }
+        <div className="scrollable-ticker-container">
+          <ul>
+            {watchlist.map((ticker, index) => {
+              const priceData = prices[ticker];
+              let priceColor = 'black';
+              if (priceData) {
+                priceColor =
+                  priceData.currentPrice > priceData.previousPrice ? 'green' : 'red';
+              }
 
-            return (
-              <li
-                key={index}
-                className="watchlist-item"
-                onClick={() => onSelectTicker(ticker)}
-                style={{
-                  cursor: 'pointer',
-                  padding: '10px',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <span>{ticker}</span>
-                <span
+              return (
+                <li
+                  key={index}
+                  className="watchlist-item"
+                  onClick={() => onSelectTicker(ticker)}
                   style={{
-                    marginLeft: 'auto',
-                    marginRight: '10px',
-                    color: priceData ? priceColor : 'black',
+                    cursor: 'pointer',
+                    padding: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: '1px solid #eee', // Border between items
                   }}
                 >
-                  {priceData
-                    ? `$${priceData.currentPrice.toFixed(2)}`
-                    : 'Not Found'}
-                </span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeTicker(ticker);
-                  }}
-                >
-                  Remove
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                  <span>{ticker}</span>
+                  <span
+                    style={{
+                      marginLeft: 'auto',
+                      marginRight: '10px',
+                      color: priceData ? priceColor : 'black',
+                    }}
+                  >
+                    {priceData
+                      ? `$${priceData.currentPrice.toFixed(2)}`
+                      : 'Not Found'}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeTicker(ticker);
+                    }}
+                    style={{
+                      backgroundColor: '#f41a1a',
+                      border: 'none',
+                      padding: '5px',
+                      borderRadius: '3px',
+                      color: 'white',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Remove
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       ) : (
         <p>Your watchlist is empty.</p>
       )}

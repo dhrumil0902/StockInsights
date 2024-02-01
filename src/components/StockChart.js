@@ -1,134 +1,175 @@
 import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
 import axios from 'axios';
-import 'chartjs-adapter-date-fns'; // Import the date adapter
+import Highcharts from 'highcharts/highstock';
+import HighchartsReact from 'highcharts-react-official';
 
 const StockChart = ({ ticker }) => {
-  const [chartData, setChartData] = useState({});
+  const [chartOptions, setChartOptions] = useState(null);
   const [interval, setInterval] = useState('1day'); // Default interval is daily
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Store error message
+  const [loadingChart, setLoadingChart] = useState(true);
+  const [loadingInfo, setLoadingInfo] = useState(true);
+  const [chartError, setChartError] = useState(false); // true/false instead of text
+  const [infoError, setInfoError] = useState(false); // true/false instead of text
+  const [stockInfo, setStockInfo] = useState({
+    currentPrice: null,
+    weekHigh: null,
+    weekLow: null,
+    percent_change: null,
+    volume: null,
+    average_volume: null,
+  });
 
+  // Fetch chart data from Twelve Data API
   useEffect(() => {
-    const fetchStockData = async () => {
-      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Replace with your Twelve Data API key
+    const fetchChartData = async () => {
+      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Your Twelve Data API key
+
       try {
-        const response = await axios.get(
+        // Request for stock price data with dynamic interval
+        const stockPriceResponse = await axios.get(
           `https://api.twelvedata.com/time_series?symbol=${ticker}&interval=${interval}&outputsize=500&apikey=${apiKey}`
-        );  // Increase outputsize to 500 for more historical data
+        );
 
-        // Check if the API returned an error
-        if (response.data.status === 'error') {
-          throw new Error(response.data.message);
-        }
+        const stockPriceData = stockPriceResponse.data.values.reverse();
 
-        const data = response.data.values.reverse();
-        const chartLabels = data.map(item => item.datetime);
-        const chartPrices = data.map(item => parseFloat(item.close));
+        // Update chartOptions with fetched price data
+        const chartData = stockPriceData.map((data) => [
+          new Date(data.datetime).getTime(),
+          parseFloat(data.close),
+        ]);
 
-        setChartData({
-          labels: chartLabels,
-          datasets: [
+        setChartOptions({
+          title: {
+            text: `${ticker} Stock Price`,
+          },
+          rangeSelector: {
+            selected: 1,
+          },
+          series: [
             {
-              label: `${ticker} Stock Price`,
-              data: chartPrices,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderWidth: 2,
-              pointHoverRadius: 5, // Increase point size on hover
-              pointHitRadius: 10, // Increase click area for points
+              name: ticker,
+              data: chartData,
+              tooltip: {
+                valueDecimals: 2,
+              },
+              type: 'line',
             },
           ],
+          xAxis: {
+            type: 'datetime',
+          },
+          tooltip: {
+            xDateFormat: '%Y-%m-%d',
+          },
         });
-        setError(null); // Clear any previous error
-        setLoading(false);
+
+        setChartError(false); // No error
       } catch (error) {
-        console.error('Error fetching stock data:', error);
-        if (error.message.includes('You have run out of API')) {
-          setError('Max API call limit reached, please try again in 1 minute!');
-        }
-        else {
-          setError('Error fetching stock data. Make sure valid ticker is provided.');
-        }
-        setLoading(false);
+        console.error('Error fetching chart data:', error);
+        setChartError(true); // Set error flag
+      } finally {
+        setLoadingChart(false); // Stop loading for the chart
       }
     };
 
     if (ticker) {
-      fetchStockData();
+      fetchChartData();
     }
   }, [ticker, interval]);
 
-  return (
-    <div>
-      <h3>Stock Graph</h3>
-      {/* Add interval selector */}
-      <select
-        value={interval}
-        onChange={(e) => setInterval(e.target.value)}
-        style={{ marginBottom: '10px' }}
-      >
-        <option value="5min">5 min</option>
-        <option value="4h">4 hour</option>
-        <option value="1day">Daily</option>
-        <option value="1week">Weekly</option>
-      </select>
+  // Fetch stock info from Twelve Data API
+  useEffect(() => {
+    const fetchStockInfo = async () => {
+      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Your Twelve Data API key
 
-      {loading ? (
+      try {
+        // Request for additional stock info such as market cap, revenue, etc.
+        const stockInfoResponse = await axios.get(
+          `https://api.twelvedata.com/quote?symbol=${ticker}&apikey=${apiKey}`
+        );
+
+        const stockInfoData = stockInfoResponse.data;
+
+        // Update the stock information, rounding values where needed
+        setStockInfo({
+          currentPrice: stockInfoData.close ? parseFloat(stockInfoData.close).toFixed(2) : 'N/A',
+          weekHigh: stockInfoData.fifty_two_week.high ? parseFloat(stockInfoData.fifty_two_week.high).toFixed(2) : 'N/A',
+          weekLow: stockInfoData.fifty_two_week.low ? parseFloat(stockInfoData.fifty_two_week.low).toFixed(2) : 'N/A',
+          percent_change: stockInfoData.percent_change ? parseFloat(stockInfoData.percent_change).toFixed(2) : 'N/A',
+          volume: stockInfoData.volume ? Math.round(stockInfoData.volume) : 'N/A',
+          average_volume: stockInfoData.average_volume ? Math.round(stockInfoData.average_volume) : 'N/A',
+        });
+
+        setInfoError(false); // No error
+      } catch (error) {
+        console.error('Error fetching stock info:', error);
+        setInfoError(true); // Set error flag
+      } finally {
+        setLoadingInfo(false); // Stop loading for the stock info
+      }
+    };
+
+    if (ticker) {
+      fetchStockInfo();
+    }
+  }, [ticker]);
+
+  return (
+    <div className="chart-container">
+      {/* Chart Section */}
+      {loadingChart ? (
         <p>Loading chart data...</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <Line
-          data={chartData}
-          options={{
-            responsive: true,
-            maintainAspectRatio: true, // Disable fixed aspect ratio
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  unit: interval === '5min' ? 'minute' : interval === '4h' ? 'hour' : 'day',
-                },
-              },
-            },
-            plugins: {
-              tooltip: {
-                mode: 'index',
-                intersect: false,
-                callbacks: {
-                  label: function (context) {
-                    const label = context.dataset.label || '';
-                    const value = context.raw || 0;
-                    return `${label}: $${value.toFixed(2)}`;
-                  },
-                },
-              },
-              zoom: {
-                pan: {
-                  enabled: true,
-                  mode: 'xy',
-                },
-                zoom: {
-                  wheel: {
-                    enabled: true,
-                  },
-                  pinch: {
-                    enabled: true,
-                  },
-                  mode: 'xy',
-                },
-              },
-            },
-            interaction: {
-              mode: 'nearest', // Display the nearest point tooltip
-              axis: 'x',
-              intersect: false, // Tooltip displays for the nearest point without intersecting
-            },
-          }}
-          height={400} // Set a specific height
-          width={600} // Set a specific width
+      ) : chartError ? (
+        <div style={{ height: '65%', width: '100%', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f9f9f9' }}>
+          <p>Could not fetch data for stock graph. API limit reached. Please try again in 1 minute.</p>
+        </div>
+      ) : chartOptions ? (
+        <HighchartsReact
+          highcharts={Highcharts}
+          constructorType={'stockChart'}
+          options={chartOptions}
+          containerProps={{ style: { height: '65%', width: '100%', flexGrow: 1 } }} // Ensure the chart takes full height/width
         />
+      ) : null}
+
+      {/* Stock Info Section */}
+      {loadingInfo ? (
+        <p>Loading stock info...</p>
+      ) : infoError ? (
+        <div style={{ flex: '0 0 35%', padding: '20px', background: '#f9f9f9', textAlign: 'center' }}>
+          <p>Could not fetch info related to stock. API limit reached. Please try again in 1 minute.</p>
+        </div>
+      ) : (
+        <div className="empty-space">
+          <div className="stock-box">
+            <h4>Current Price</h4>
+            <p>${stockInfo.currentPrice}</p>
+          </div>
+          <div className="stock-box">
+            <h4>Change</h4>
+            <p style={{ color: stockInfo.percent_change > 0 ? 'green' : 'red' }}>
+              {stockInfo.percent_change}%
+            </p>
+          </div>
+          <div className="stock-box">
+            <h4>52 Week High</h4>
+            <p>${stockInfo.weekHigh}</p>
+          </div>
+          <div className="stock-box">
+            <h4>52 Week Low</h4>
+            <p>${stockInfo.weekLow}</p>
+          </div>
+          <div className="stock-box">
+            <h4>Volume</h4>
+            <p style={{ color: stockInfo.average_volume < stockInfo.volume ? 'green' : 'red' }}>
+              {stockInfo.volume}
+            </p>
+          </div>
+          <div className="stock-box">
+            <h4>Average Volume</h4>
+            <p>{stockInfo.average_volume}</p>
+          </div>
+        </div>
       )}
     </div>
   );

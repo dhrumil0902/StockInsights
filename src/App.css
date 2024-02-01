@@ -1,155 +1,207 @@
 /* Main container */
+
 .app-container {
-  margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+    position: relative;
+    min-height: 100%;
+    /* Space for the chart at the bottom */
 }
+
 
 /* Header styling */
+
 header {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
+
 
 /* Dashboard grid layout */
+
 .dashboard {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr; /* Three columns: Watchlist, Chart, News */
-  grid-template-rows: auto auto; /* Two rows: first for watchlist/chart, second for Reddit */
-  gap: 20px;
-  margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    /* Three columns: Watchlist, Chart, News */
+    grid-template-rows: auto auto;
+    /* Two rows: first for watchlist/chart, second for Reddit */
+    gap: 20px;
 }
+
 
 /* Chart, news, and reddit containers share similar styles */
-.chart-container,
+
 .news-container,
+.watchlist-container,
+
+/* Ensure there's only one definition for watchlist-container */
+
 .reddit-threads-container {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: auto;
+    text-align: 'center',
 }
 
+
 /* Individual watchlist item */
+
 .watchlist-item {
-  margin-bottom: 10px; /* Add some spacing between items */
+    margin-bottom: 10px;
+    /* Add some spacing between items */
 }
+
 
 /* Chart container specific styles */
 .chart-container {
-  grid-column: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure the container takes up the parent's height */
+  background-color: black; /* Optional background */
+}
+
+.chart-content {
+  flex: 0 0 65%; /* Chart takes up 75% of the height */
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: auto;
-  min-height: 300px; /* Set a reasonable minimum height */
+  padding: 0;
 }
 
-.chart-container canvas {
-  max-width: 100%; /* Ensure the chart takes the full width */
-  height: auto; /* Allow the chart to adjust its height */
+.empty-space {
+  flex: 0 0 35%; /* Stock info takes up 35% of the height */
+  background-color: #f9f9f9;
+  display: flex;
+  flex-grow: 1;
+  padding: 0;
 }
 
-.chart-container h3 {
-  font-size: 22px;
-  font-weight: bold;
+.stock-box {
+  width: 30%; /* Width for each box to ensure 3 boxes in each row */
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin-bottom: 15px;
+  font-size: 16px;
+  flex-grow: 1;
 }
+
+.stock-box h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stock-box p {
+  margin: 0;
+  font-size: 16px;
+}
+
+
+.stock-info {
+  text-align: center; /* Center the text content */
+  color: #333; /* Darker text color */
+  font-size: 16px; /* Adjust font size */
+}
+
+.stock-info h3 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.stock-info p {
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+
 
 
 /* Reddit threads container */
+
 .reddit-threads-container {
-  grid-column: 1 / 3;
-  grid-row: 2 / 3;
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
 }
 
-/* Interval buttons */
-.interval-buttons {
-  margin-bottom: 20px;
-}
-
-.interval-buttons button {
-  margin-right: 10px;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.interval-buttons button:hover {
-  background-color: #0056b3;
-}
 
 /* Search container to center the form */
-/* Search container to center the form */
+
 .search-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
+
 
 /* Search form layout */
+
 .search-form {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Space between input and button */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Space between input and button */
 }
+
 
 /* Input styling */
+
 .ticker-input {
-  padding: 10px;
-  font-size: 16px;
-  width: 300px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  text-transform: uppercase; /* Ensure input is uppercase */
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-transform: uppercase;
+    /* Ensure input is uppercase */
 }
 
+
 /* Button styling */
+
 .search-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
 }
 
 .search-button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 
-
 /* Responsive adjustments for smaller screens */
+
 @media (max-width: 768px) {
-  .search-form {
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .ticker-input,
-  .search-button {
-    width: 100%;
-  }
-
-  /* Make dashboard fully responsive on smaller screens */
-  .dashboard {
-    grid-template-columns: 1fr; /* Stack columns vertically */
-    grid-template-rows: auto; /* Remove the fixed rows */
-    gap: 20px;
-  }
-
-  .watchlist-container,
-  .chart-container,
-  .news-container {
-    width: 100%;
-    margin-bottom: 20px;
-  }
+    .search-form {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .ticker-input,
+    .search-button {
+        width: 100%;
+    }
+    /* Make dashboard fully responsive on smaller screens */
+    .dashboard {
+        grid-template-columns: 1fr;
+        /* Stack columns vertically */
+        grid-template-rows: auto;
+        /* Remove the fixed rows */
+        gap: 20px;
+    }
+    .watchlist-container,
+    .news-container {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+        justify-content: center;
+    }
 }
