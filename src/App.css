@@ -6,7 +6,16 @@
     /* Space for the chart at the bottom */
 }
 
-
+header h1 {
+  font-size: 3rem; /* Make the font size larger */
+  color: #007bff; /* Give it a nice blue color */
+  font-weight: 700; /* Make it bold */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  margin-bottom: 20px; /* Add some space below the title */
+  font-family: 'Poppins', sans-serif; /* Use a modern and clean font */
+  letter-spacing: 2px; /* Space out the letters a bit */
+  text-align: center; /* Center the title */
+}
 /* Header styling */
 
 header {
@@ -19,18 +28,22 @@ header {
 
 .dashboard {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 0.8fr 2.5fr 1fr;
     /* Three columns: Watchlist, Chart, News */
     grid-template-rows: auto auto;
     /* Two rows: first for watchlist/chart, second for Reddit */
     gap: 20px;
 }
 
+.watchlist-container{
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  padding: 2%;
+}
 
 /* Chart, news, and reddit containers share similar styles */
 
 .news-container,
-.watchlist-container,
 
 /* Ensure there's only one definition for watchlist-container */
 
@@ -149,24 +162,43 @@ header {
 /* Input styling */
 
 .ticker-input {
-    padding: 10px;
-    font-size: 16px;
-    width: 300px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-transform: uppercase;
-    /* Ensure input is uppercase */
+  padding: 5px;
+  font-size: 16px;
+  width: 100px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin: 0;
+  box-sizing: border-box;
+  /* Ensure input is uppercase */
 }
 
 
 /* Button styling */
+button {
+  background-color: #f9f9f9;
+  padding: 4px;
+  border-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px; /* Rounded corners for right */
+  transition: background-color 0.3s ease;
+  margin: 2px;
+}
+
+/* Button styling */
+button:hover {
+  background-color: #d7d5d5;
+}
 
 .search-button {
     background-color: #007bff;
     color: white;
     border: none;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 20px;
     cursor: pointer;
     border-radius: 4px;
     display: flex;
@@ -174,7 +206,7 @@ header {
 }
 
 .search-button:hover {
-    background-color: #0056b3;
+    background-color: black;
 }
 
 
@@ -197,7 +229,6 @@ header {
         /* Remove the fixed rows */
         gap: 20px;
     }
-    .watchlist-container,
     .news-container {
         width: 100%;
         margin-bottom: 20px;

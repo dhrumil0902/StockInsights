@@ -39,9 +39,6 @@ const StockChart = ({ ticker }) => {
         ]);
 
         setChartOptions({
-          title: {
-            text: `${ticker} Stock Price`,
-          },
           rangeSelector: {
             selected: 1,
           },

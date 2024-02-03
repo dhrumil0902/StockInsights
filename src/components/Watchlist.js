@@ -39,9 +39,11 @@ const Watchlist = ({ onSelectTicker }) => {
       if (data && data.length >= 2) {
         const currentPrice = parseFloat(data[0].close); // Most recent close price
         const previousPrice = parseFloat(data[1].close); // Previous day's close price
+        const percentChange = ((currentPrice - previousPrice) / previousPrice) * 100; // Calculate percentage change
+
         setPrices((prevPrices) => ({
           ...prevPrices,
-          [ticker]: { currentPrice, previousPrice }, // Store both prices
+          [ticker]: { currentPrice, previousPrice, percentChange }, // Store prices and percentage change
         }));
       } else {
         throw new Error('No data found');
@@ -115,39 +117,30 @@ const Watchlist = ({ onSelectTicker }) => {
                   key={index}
                   className="watchlist-item"
                   onClick={() => onSelectTicker(ticker)}
-                  style={{
-                    cursor: 'pointer',
-                    padding: '10px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderBottom: '1px solid #eee', // Border between items
-                  }}
                 >
-                  <span>{ticker}</span>
+                  <span>{ticker}</span> {/* Adjust for space */}
                   <span
                     style={{
-                      marginLeft: 'auto',
-                      marginRight: '10px',
-                      color: priceData ? priceColor : 'black',
+                      color: priceColor,
+                      textAlign: 'center',
                     }}
                   >
-                    {priceData
-                      ? `$${priceData.currentPrice.toFixed(2)}`
-                      : 'Not Found'}
+                    {priceData ? `$${priceData.currentPrice.toFixed(2)}` : 'Not Found'}
+                  </span>
+                  <span
+                    style={{
+                      color: priceData && priceData.percentChange !== undefined ? (priceData.percentChange > 0 ? 'green' : 'red') : 'black',
+                      textAlign: 'center',
+                    }}
+                  >
+                    {priceData && priceData.percentChange !== undefined ? `${priceData.percentChange.toFixed(2)}%` : 'N/A'}
                   </span>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       removeTicker(ticker);
                     }}
-                    style={{
-                      backgroundColor: '#f41a1a',
-                      border: 'none',
-                      padding: '5px',
-                      borderRadius: '3px',
-                      color: 'white',
-                      cursor: 'pointer',
-                    }}
+                    className="remove-button"
                   >
                     Remove
                   </button>

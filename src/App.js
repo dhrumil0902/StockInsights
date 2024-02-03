@@ -39,7 +39,7 @@ const App = () => {
   return (
     <div className="app-container">
       <header>
-        <h1>Stock Dashboard for {ticker}</h1>
+        <h1>Stock Insights</h1>
         <form onSubmit={handleSearch}>
           <input
             type="text"

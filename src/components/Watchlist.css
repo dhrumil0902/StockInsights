@@ -16,9 +16,19 @@
 }
 
 .scrollable-ticker-container {
-  max-height: 460px; /* Set the height of the scrollable container */
-  overflow-y: auto; /* Enable scrolling when content overflows */
+  max-height: 430px; /* Set the height of the scrollable container */
+  overflow-y: auto; /* Enable scrolling vertically */
+  margin-left: 0;
+  background-color: #f0f0f0;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  flex-grow: 1;
 }
+.scrollable-ticker-container ul {
+  list-style-type: none; /* Remove bullet points from the list */
+  padding-left: 0; /* Remove padding on the left */
+  margin-left: 0; /* Ensure no extra margin on the left */
+}
+
 
 /* Input field styling */
 .input-container input {
@@ -28,6 +38,19 @@
   width: 200px;
   margin-right: 10px;
   font-size: 14px;
+}
+
+.add-to-watchlist {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-watchlist:hover {
+  background-color: #0056b3;
 }
 
 /* Add-to-watchlist button */
@@ -47,7 +70,8 @@ button.add-to-watchlist:hover {
 
 /* Change background on hover */
 .watchlist-item:hover {
-  background-color: #f0f0f0;
+  background-color: #d3d0d0;
+  cursor: pointer;
 }
 
 /* Remove button for each item */
@@ -65,11 +89,19 @@ button.add-to-watchlist:hover {
 }
 
 /* Color for stock prices */
-.watchlist-item span {
-  font-size: 14px;
-  margin-right: 10px;
+.watchlist-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto; /* Adjust to split space evenly */
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee; /* Border between items */
 }
 
+.watchlist-item span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* Change the price color based on positive or negative */
 .watchlist-item .price-positive {
   color: green;
