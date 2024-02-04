@@ -19,7 +19,6 @@
   max-height: 430px; /* Set the height of the scrollable container */
   overflow-y: auto; /* Enable scrolling vertically */
   margin-left: 0;
-  background-color: #f0f0f0;
   overflow-x: hidden; /* Prevent horizontal scrolling */
   flex-grow: 1;
 }

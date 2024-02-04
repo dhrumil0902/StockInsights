@@ -3,6 +3,7 @@
 .app-container {
     position: relative;
     min-height: 100%;
+    padding: 15px;
     /* Space for the chart at the bottom */
 }
 
@@ -50,8 +51,8 @@ header {
 .reddit-threads-container {
     background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     height: auto;
+    width: 100%;
     text-align: 'center',
 }
 
@@ -128,8 +129,6 @@ header {
   margin: 5px 0;
   line-height: 1.5;
 }
-
-
 
 
 /* Reddit threads container */
@@ -213,26 +212,58 @@ button:hover {
 /* Responsive adjustments for smaller screens */
 
 @media (max-width: 768px) {
-    .search-form {
-        flex-direction: column;
-        gap: 5px;
-    }
-    .ticker-input,
-    .search-button {
-        width: 100%;
-    }
     /* Make dashboard fully responsive on smaller screens */
-    .dashboard {
-        grid-template-columns: 1fr;
-        /* Stack columns vertically */
-        grid-template-rows: auto;
-        /* Remove the fixed rows */
-        gap: 20px;
-    }
-    .news-container {
-        width: 100%;
-        margin-bottom: 20px;
-        text-align: center;
-        justify-content: center;
-    }
+    @media (max-width: 768px) {
+      .dashboard {
+          display: grid;
+          grid-template-columns: 1fr; /* Stack columns vertically */
+          grid-template-rows: auto auto auto auto; /* Ensure each component has its own row */
+          gap: 20px;
+          width: 100%;
+      }
+  
+      /* Ensure full width for watchlist, chart, and news */
+      .watchlist-container,
+      .chart-container,
+      .news-container,
+      .reddit-threads-container {
+          width: 100%;
+      }
+  
+      .watchlist-container {
+          grid-column: 1 / 2;
+      }
+  
+      .chart-container {
+          grid-column: 1 / 2;
+      }
+  
+      .news-container {
+          grid-column: 1 / 2;
+          margin: 0;
+      }
+  
+      .reddit-threads-container {
+          grid-column: 1 / 2;
+      }
+  
+      header h1 {
+          font-size: 2rem;
+      }
+  
+      .search-form {
+          justify-content: center;
+          gap: 5px;
+          /* Keep input and button on the same line */
+      }
+  
+      /* Adjust width for input and button */
+      .ticker-input {
+          width: 30%; /* Take 70% of the width */
+      }
+  
+      .search-button {
+          width: 25%; /* Take 25% of the width */
+      }
+  }
 }

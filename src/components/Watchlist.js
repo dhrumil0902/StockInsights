@@ -125,7 +125,7 @@ const Watchlist = ({ onSelectTicker }) => {
                       textAlign: 'center',
                     }}
                   >
-                    {priceData ? `$${priceData.currentPrice.toFixed(2)}` : 'Not Found'}
+                    {priceData ? `$${priceData.currentPrice.toFixed(2)}` : ''}
                   </span>
                   <span
                     style={{
@@ -133,7 +133,7 @@ const Watchlist = ({ onSelectTicker }) => {
                       textAlign: 'center',
                     }}
                   >
-                    {priceData && priceData.percentChange !== undefined ? `${priceData.percentChange.toFixed(2)}%` : 'N/A'}
+                    {priceData && priceData.percentChange !== undefined ? `${priceData.percentChange.toFixed(2)}%` : ''}
                   </span>
                   <button
                     onClick={(e) => {

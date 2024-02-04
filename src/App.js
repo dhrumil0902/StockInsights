@@ -45,7 +45,7 @@ const App = () => {
             type="text"
             value={inputValue} // Bind the input value to inputValue state
             onChange={(e) => setInputValue(e.target.value.toUpperCase())} // Update input field as user types (uppercase)
-            placeholder="Enter stock ticker"
+            placeholder="Ticker"
             className="ticker-input"
             style={{ textTransform: 'uppercase' }} // Ensure the input shows uppercase
           />

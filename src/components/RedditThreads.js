@@ -79,7 +79,7 @@ const RedditThreads = ({ ticker }) => {
           onChange={(e) => setSortMethod(e.target.value)}
           className="reddit-sort-dropdown" // Added class for styling
         >
-          <option value="hot">Hot</option>
+          <option value="hot">Trending</option>
           <option value="top">Most Upvoted</option>
           <option value="new">Most Recent</option>
         </select>
@@ -106,7 +106,6 @@ const RedditThreads = ({ ticker }) => {
                   marginBottom: '10px',
                   border: '1px solid #ddd',
                   borderRadius: '5px',
-                  backgroundColor: '#f9f9f9',
                   transition: 'background-color 0.3s',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
