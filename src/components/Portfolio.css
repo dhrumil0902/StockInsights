@@ -1,0 +1,68 @@
+.portfolio-container {
+    grid-column: 2 / 3;
+    grid-row: 3 / 3;
+    background-color: #f9f9f9;
+    padding: 2%;
+  }
+  
+  .portfolio-container h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .input-container input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .add-to-portfolio {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-to-portfolio:hover {
+    background-color: #0056b3;
+  }
+  
+  .scrollable-portfolio-container {
+    max-height: 460px;
+    overflow-y: auto;
+  }
+  
+  .portfolio-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .remove-stock {
+    background-color: #f41a1a;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .remove-stock:hover {
+    background-color: #d00;
+  }
+  

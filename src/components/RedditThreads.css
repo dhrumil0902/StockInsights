@@ -1,5 +1,5 @@
 .reddit-threads-container h3 {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     margin-bottom: 15px;
     color: #333;
     text-align: center;
@@ -39,7 +39,7 @@
 }
 
 .reddit-threads-container a {
-    color: #007bff;
+    color: #0b6dd6;
     font-weight: bold;
     text-decoration: none;
 }
@@ -50,6 +50,7 @@
 
 .reddit-threads-container p {
     font-size: 14px;
+    color: #0b6dd6;
     margin-top: 8px;
 }
 

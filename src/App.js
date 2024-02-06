@@ -1,19 +1,17 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import StockChart from './components/StockChart';
 import Watchlist from './components/Watchlist';
-import './App.css'; // Add some global styles
+import Portfolio from './components/Portfolio';  // Import Portfolio component
+import './App.css';
 
-// Lazy load components
 const StockNews = React.lazy(() => import('./components/StockNews'));
 const RedditThreads = React.lazy(() => import('./components/RedditThreads'));
 
 const App = () => {
-  // State to manage the actual ticker used in search
   const [ticker, setTicker] = useState(() => {
     return localStorage.getItem('selectedTicker') || 'TSLA'; // Default to 'TSLA'
   });
 
-  // State to manage the input field value
   const [inputValue, setInputValue] = useState(ticker);
 
   useEffect(() => {
@@ -28,11 +26,10 @@ const App = () => {
     localStorage.setItem('selectedTicker', ticker);
   }, [ticker]);
 
-  // Handle search submission (only update ticker on submission)
   const handleSearch = (e) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      setTicker(inputValue.toUpperCase()); // Set ticker only when "Enter" is pressed or search is clicked
+      setTicker(inputValue.toUpperCase());
     }
   };
 
@@ -43,11 +40,10 @@ const App = () => {
         <form onSubmit={handleSearch}>
           <input
             type="text"
-            value={inputValue} // Bind the input value to inputValue state
-            onChange={(e) => setInputValue(e.target.value.toUpperCase())} // Update input field as user types (uppercase)
-            placeholder="Ticker"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value.toUpperCase())}
+            placeholder="Enter stock ticker"
             className="ticker-input"
-            style={{ textTransform: 'uppercase' }} // Ensure the input shows uppercase
           />
           <button type="submit">🔍</button>
         </form>
@@ -62,16 +58,19 @@ const App = () => {
           <StockChart ticker={ticker} />
         </div>
 
-        {/* Suspense for lazy-loaded components */}
-        <Suspense fallback={<div>Loading Reddit threads...</div>}>
-          <div className="reddit-threads-container">
-            <RedditThreads ticker={ticker} />
-          </div>
-        </Suspense>
+        <div className="portfolio-container">
+          <Portfolio onSelectTicker={setTicker} /> {/* Pass the setTicker function here */}
+        </div>
 
         <Suspense fallback={<div>Loading news...</div>}>
           <div className="news-container">
             <StockNews ticker={ticker} />
+          </div>
+        </Suspense>
+
+        <Suspense fallback={<div>Loading Reddit threads...</div>}>
+          <div className="reddit-threads-container">
+            <RedditThreads ticker={ticker} />
           </div>
         </Suspense>
       </div>
