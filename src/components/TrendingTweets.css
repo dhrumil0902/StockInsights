@@ -1,0 +1,21 @@
+.tweets-container {
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tweet-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tweet-item p {
+    margin: 5px 0;
+  }
+  
+  .tweet-item:last-child {
+    border-bottom: none;
+  }
+  

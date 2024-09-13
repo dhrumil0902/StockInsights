@@ -1,0 +1,27 @@
+{
+    "name": "your-app-name",
+    "version": "1.0.0",
+    "description": "Your stock dashboard React app",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "homepage": "https://github.com/dhrumil0902/week-1",
+    "main": "index.js",
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject"
+    },
+    "dependencies": {
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "axios": "^0.21.1"
+    },
+    "devDependencies": {
+      "webpack": "^5.38.1",
+      "webpack-cli": "^4.7.0"
+    },
+    "author": "",
+    "license": "ISC"
+  }
+  

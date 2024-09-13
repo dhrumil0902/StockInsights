@@ -1,0 +1,77 @@
+.reddit-threads-container {
+    background-color: #f6f7f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reddit-threads-container h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .reddit-threads-container select {
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .reddit-threads-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .reddit-threads-container li {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .reddit-threads-container li:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reddit-threads-container a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .reddit-threads-container a:hover {
+    text-decoration: underline;
+  }
+  
+  .reddit-threads-container p {
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+  }
+
+  .reddit-sort-dropdown {
+    font-weight: bold;
+    font-size: 30px;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 50px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  
+  .reddit-sort-dropdown option {
+    font-weight: bold;
+  }
+  
+  h3 {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+  
+  
