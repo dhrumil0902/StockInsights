@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const API_KEY = 'your-api-key'; // Replace with your stock API key
+const API_KEY = '';
 
 const Portfolio = ({ onSelectTicker }) => {
   const [portfolio, setPortfolio] = useState([]);
   const [ticker, setTicker] = useState('');
   const [price, setPrice] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [editMode, setEditMode] = useState(null); // Track which stock is being edited
+  const [editMode, setEditMode] = useState(null);
   const [editPrice, setEditPrice] = useState('');
   const [editQuantity, setEditQuantity] = useState('');
   const [currentPrices, setCurrentPrices] = useState({});
@@ -19,52 +19,55 @@ const Portfolio = ({ onSelectTicker }) => {
     setPortfolio(savedPortfolio);
   }, []);
 
-  // Save portfolio to local storage
   useEffect(() => {
-    if (portfolio.length > 0) {
-      localStorage.setItem('portfolio', JSON.stringify(portfolio));
-    }
+    localStorage.setItem('portfolio', JSON.stringify(portfolio));
   }, [portfolio]);
 
-  // Add stock to the portfolio
   const addStock = () => {
+    if (ticker.length > 5) {
+        alert('Ticker length must be 5 characters or less.');
+        return;
+    }
+
+    if (/\d/.test(ticker)) {
+      alert('Ticker must not include numbers.');
+      return;
+    }
+
     if (ticker && price > 0 && quantity > 0) {
-      // Check if the ticker already exists in the portfolio
-      const isTickerInPortfolio = portfolio.some(stock => stock.ticker === ticker.toUpperCase());
-  
+      const upperTicker = ticker.toUpperCase();
+      const isTickerInPortfolio = portfolio.some(stock => stock.ticker === upperTicker);
+
       if (isTickerInPortfolio) {
         alert('This stock is already in your portfolio.');
-        return; // Exit the function if the ticker is already in the portfolio
+        return;
       }
-  
+
       const newStock = {
-        ticker: ticker.toUpperCase(),
+        ticker: upperTicker,
         price: parseFloat(price),
         quantity: parseInt(quantity, 10),
       };
-  
+
       setPortfolio([...portfolio, newStock]);
       setTicker('');
       setPrice('');
       setQuantity('');
-      fetchCurrentPrice(ticker.toUpperCase()); // Fetch current price for the new stock
+      fetchCurrentPrice(upperTicker); // Fetch current price for new stock
     } else {
-      alert('Price and quantity must be greater than 0');
+      alert('Please enter valid ticker, price, and quantity.');
     }
   };
 
-  // Remove stock from the portfolio
   const removeStock = (tickerToRemove) => {
-    const updatedPortfolio = portfolio.filter(stock => stock.ticker !== tickerToRemove);
-    setPortfolio(updatedPortfolio);
-
-    // Also remove current price entry
-    const updatedCurrentPrices = { ...currentPrices };
-    delete updatedCurrentPrices[tickerToRemove];
-    setCurrentPrices(updatedCurrentPrices);
+    setPortfolio(portfolio.filter(stock => stock.ticker !== tickerToRemove));
+    setCurrentPrices(prevPrices => {
+      const newPrices = { ...prevPrices };
+      delete newPrices[tickerToRemove];
+      return newPrices;
+    });
   };
 
-  // Enter edit mode for a stock
   const editStock = (ticker) => {
     const stockToEdit = portfolio.find(stock => stock.ticker === ticker);
     setEditMode(ticker);
@@ -72,7 +75,6 @@ const Portfolio = ({ onSelectTicker }) => {
     setEditQuantity(stockToEdit.quantity);
   };
 
-  // Save edited stock
   const saveEditStock = (ticker) => {
     if (editPrice > 0 && editQuantity > 0) {
       const updatedPortfolio = portfolio.map(stock => {
@@ -82,42 +84,36 @@ const Portfolio = ({ onSelectTicker }) => {
         return stock;
       });
       setPortfolio(updatedPortfolio);
-      setEditMode(null); // Exit edit mode
+      setEditMode(null);
     } else {
       alert('Price and quantity must be greater than 0');
     }
   };
 
-  // Fetch current price for each stock in the portfolio
   const fetchCurrentPrice = async (ticker) => {
     try {
       const response = await axios.get(
         `https://api.example.com/stock/${ticker}/quote?apikey=${API_KEY}`
       );
-      const currentPrice = response.data.price; // Assuming the API returns a price object
-      setCurrentPrices((prevPrices) => ({
-        ...prevPrices,
-        [ticker]: currentPrice,
-      }));
+      const currentPrice = response.data.price;
+      setCurrentPrices(prevPrices => ({ ...prevPrices, [ticker]: currentPrice }));
     } catch (error) {
       console.error('Error fetching current price:', error);
     }
   };
 
-  // Fetch current prices for all tickers in the portfolio
   useEffect(() => {
     portfolio.forEach(stock => {
       fetchCurrentPrice(stock.ticker);
     });
-  }, [portfolio]);
+  }, []);
 
-  // Calculate total value of the portfolio
   const totalPortfolioValue = portfolio.reduce(
     (acc, stock) => acc + stock.price * stock.quantity,
     0
   );
 
-  // Calculate the percent change between the original price and the current price
+  // Calculate percentage change
   const calculateChange = (originalPrice, currentPrice) => {
     if (!currentPrice || !originalPrice) return null;
     return ((currentPrice - originalPrice) / originalPrice) * 100;
@@ -163,12 +159,12 @@ const Portfolio = ({ onSelectTicker }) => {
                 <th>Current Price</th>
                 <th>Change (%)</th>
                 <th>Total</th>
-                <th></th> {/* Empty header for edit and remove buttons column */}
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {portfolio.map((stock, index) => (
-                <tr key={index} onClick={() => onSelectTicker(stock.ticker)} style={{ cursor: 'pointer' }}> {/* Make row clickable */}
+                <tr key={index} onClick={() => onSelectTicker(stock.ticker)} style={{ cursor: 'pointer' }}>
                   <td>{stock.ticker}</td>
                   <td>
                     {editMode === stock.ticker ? (
@@ -176,8 +172,7 @@ const Portfolio = ({ onSelectTicker }) => {
                         type="number"
                         value={editPrice}
                         onChange={(e) => setEditPrice(e.target.value)}
-                        min="0"
-                        className="edit-input-small" // Apply class for smaller input
+                        className="edit-input-small"
                       />
                     ) : (
                       `$${stock.price.toFixed(2)}`
@@ -189,8 +184,7 @@ const Portfolio = ({ onSelectTicker }) => {
                         type="number"
                         value={editQuantity}
                         onChange={(e) => setEditQuantity(e.target.value)}
-                        min="0"
-                        className="edit-input-small" // Apply class for smaller input
+                        className="edit-input-small"
                       />
                     ) : (
                       stock.quantity
@@ -209,24 +203,15 @@ const Portfolio = ({ onSelectTicker }) => {
                   <td>${(stock.price * stock.quantity).toFixed(2)}</td>
                   <td>
                     {editMode === stock.ticker ? (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); saveEditStock(stock.ticker); }}
-                        className="save-edit"
-                      >
+                      <button onClick={(e) => { e.stopPropagation(); saveEditStock(stock.ticker); }} className="save-edit">
                         Save
                       </button>
                     ) : (
-                      <button
-                        onClick={(e) => { e.stopPropagation(); editStock(stock.ticker); }}
-                        className="edit-stock"
-                      >
+                      <button onClick={(e) => { e.stopPropagation(); editStock(stock.ticker); }} className="edit-stock">
                         Edit
                       </button>
                     )}
-                    <button
-                      onClick={(e) => { e.stopPropagation(); removeStock(stock.ticker); }}
-                      className="remove-from-portfolio"
-                    >
+                    <button onClick={(e) => { e.stopPropagation(); removeStock(stock.ticker); }} className="remove-from-portfolio">
                       Remove
                     </button>
                   </td>

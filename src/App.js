@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import StockChart from './components/StockChart';
 import Watchlist from './components/Watchlist';
-import Portfolio from './components/Portfolio';  // Import Portfolio component
+import Portfolio from './components/Portfolio';
 import './App.css';
 
 const StockNews = React.lazy(() => import('./components/StockNews'));
@@ -13,18 +13,26 @@ const App = () => {
   });
 
   const [inputValue, setInputValue] = useState(ticker);
+  const [notes, setNotes] = useState('');
 
   useEffect(() => {
     const savedTicker = localStorage.getItem('selectedTicker');
+    const savedNotes = localStorage.getItem('notes') || '';
     if (savedTicker) {
       setTicker(savedTicker);
       setInputValue(savedTicker); // Sync the input value with the saved ticker
     }
+    setNotes(savedNotes); // Load saved notes from localStorage
   }, []);
 
   useEffect(() => {
     localStorage.setItem('selectedTicker', ticker);
   }, [ticker]);
+
+  const saveNotes = () => {
+    localStorage.setItem('notes', notes);
+    alert('Notes saved!');
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -42,7 +50,7 @@ const App = () => {
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value.toUpperCase())}
-            placeholder="Enter stock ticker"
+            placeholder="Ticker"
             className="ticker-input"
           />
           <button type="submit">🔍</button>
@@ -50,16 +58,16 @@ const App = () => {
       </header>
 
       <div className="dashboard">
+        <div className="portfolio-container">
+          <Portfolio onSelectTicker={setTicker} /> {}
+        </div>
+
         <div className="watchlist-container">
           <Watchlist onSelectTicker={setTicker} />
         </div>
 
         <div className="chart-container">
           <StockChart ticker={ticker} />
-        </div>
-
-        <div className="portfolio-container">
-          <Portfolio onSelectTicker={setTicker} /> {/* Pass the setTicker function here */}
         </div>
 
         <Suspense fallback={<div>Loading news...</div>}>
@@ -73,6 +81,19 @@ const App = () => {
             <RedditThreads ticker={ticker} />
           </div>
         </Suspense>
+
+        {}
+        <div className="notes-container">
+          <h3>My Notes</h3>
+          <textarea
+            placeholder="Add your notes here..."
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+          <button className="save-notes" onClick={saveNotes}>
+            Save Notes
+          </button>
+        </div>
       </div>
     </div>
   );

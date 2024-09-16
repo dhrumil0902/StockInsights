@@ -5,9 +5,9 @@ import HighchartsReact from 'highcharts-react-official';
 
 const StockChart = ({ ticker }) => {
   const [chartOptions, setChartOptions] = useState({});
-  const [interval, setInterval] = useState('1day'); // Default interval is daily
+  const [interval, setInterval] = useState('1day');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // Store error message
+  const [error, setError] = useState(null);
   const [stockInfo, setStockInfo] = useState({
     currentPrice: null,
     weekHigh: null,
@@ -19,7 +19,7 @@ const StockChart = ({ ticker }) => {
 
   useEffect(() => {
     const fetchStockData = async () => {
-      const apiKey = '8d801fb699msh6a9bf14462f343ap146256jsne219a0708264'; // Replace with your Rapid API key
+      const apiKey = '8d801fb699msh6a9bf14462f343ap146256jsne219a0708264';
       try {
         const options = {
           method: 'POST',
@@ -35,7 +35,6 @@ const StockChart = ({ ticker }) => {
         const response = await axios.request(options);
         const data = response.data;
 
-        // Store fetched stock info into the state
         setStockInfo({
           currentPrice: data.currentPrice || 'N/A',
           weekHigh: data.fiftyTwoWeekHigh || 'N/A',
@@ -45,7 +44,7 @@ const StockChart = ({ ticker }) => {
           peRatio: data.trailingPE || 'N/A',
         });
 
-        setError(null); // Clear any previous error
+        setError(null);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching stock data:', error);
@@ -71,7 +70,7 @@ const StockChart = ({ ticker }) => {
             highcharts={Highcharts}
             constructorType={'stockChart'}
             options={chartOptions}
-            containerProps={{ style: { height: '65%', width: '100%', flexGrow: 1 } }} // Ensure the chart takes full height/width
+            containerProps={{ style: { height: '65%', width: '100%', flexGrow: 1 } }}
           />
 
           {/* Stock Info Section */}

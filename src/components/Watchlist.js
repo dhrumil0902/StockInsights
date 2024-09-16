@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Watchlist.css'; // Import the CSS file
+import './Watchlist.css';
 
-const API_KEY = '1fd5ef43b97e46cd891f06aeba1f0606'; // Replace with your Twelve Data API key
+const API_KEY = '1fd5ef43b97e46cd891f06aeba1f0606';
 
 const Watchlist = ({ onSelectTicker }) => {
   const [tickerInput, setTickerInput] = useState('');
   const [watchlist, setWatchlist] = useState([]);
-  const [prices, setPrices] = useState({}); // Store current and previous day prices
+  const [prices, setPrices] = useState({});
 
-  // Load watchlist from localStorage when the component mounts
   useEffect(() => {
     const savedWatchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
     setWatchlist(savedWatchlist);
 
-    // Fetch stock prices for all tickers in the watchlist
     if (savedWatchlist.length > 0) {
       savedWatchlist.forEach(ticker => {
-        fetchStockPrice(ticker); // Fetch stock prices for each saved ticker
+        fetchStockPrice(ticker);
       });
     }
-  }, []); // Empty dependency array to run this only on component mount
+  }, []);
 
   // Save watchlist to localStorage whenever it changes
   useEffect(() => {
@@ -52,32 +50,29 @@ const Watchlist = ({ onSelectTicker }) => {
       console.error('Error fetching stock price:', error);
       setPrices((prevPrices) => ({
         ...prevPrices,
-        [ticker]: null, // Set null for ticker if an error occurs
+        [ticker]: null,
       }));
     }
   };
 
-  // Add a stock to the watchlist and fetch its price
   const addTicker = () => {
     const upperTicker = tickerInput.toUpperCase();
     if (upperTicker && !watchlist.includes(upperTicker)) {
-      setWatchlist((prevWatchlist) => [...prevWatchlist, upperTicker]); // Add to watchlist
-      fetchStockPrice(upperTicker); // Fetch price only for the added ticker
-      setTickerInput(''); // Clear input after adding
+      setWatchlist((prevWatchlist) => [...prevWatchlist, upperTicker]);
+      fetchStockPrice(upperTicker);
+      setTickerInput('');
     }
   };
 
-  // Remove a stock from the watchlist
   const removeTicker = (ticker) => {
     const updatedWatchlist = watchlist.filter((item) => item !== ticker);
-    setWatchlist(updatedWatchlist); // Update the state
-    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist)); // Save updated list to localStorage
+    setWatchlist(updatedWatchlist);
+    localStorage.setItem('watchlist', JSON.stringify(updatedWatchlist)); 
     const updatedPrices = { ...prices };
     delete updatedPrices[ticker];
-    setPrices(updatedPrices); // Remove the price when the ticker is removed
+    setPrices(updatedPrices);
   };
 
-  // Handle pressing Enter to add the ticker
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       addTicker();
@@ -92,15 +87,15 @@ const Watchlist = ({ onSelectTicker }) => {
           type="text"
           value={tickerInput}
           onChange={(e) => setTickerInput(e.target.value)}
-          onKeyPress={handleKeyPress} // Add the stock when Enter is pressed
-          placeholder="Enter stock ticker"
+          onKeyPress={handleKeyPress}
+          placeholder="Ticker"
         />
         <button className="add-to-watchlist" onClick={addTicker}>
           Add
         </button>
       </div>
 
-      {/* Scrollable container for tickers */}
+      {}
       {watchlist.length > 0 ? (
         <div className="scrollable-ticker-container">
           <ul>

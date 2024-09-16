@@ -21,7 +21,7 @@ const StockNews = ({ ticker }) => {
           }
         );
 
-        setNews(response.data.value.slice(0, 6)); // Get the top 6 news articles
+        setNews(response.data.value.slice(0, 6));
         setLoading(false);
       } catch (error) {
         console.error('Error fetching news:', error);
@@ -70,7 +70,6 @@ const StockNews = ({ ticker }) => {
   );
 };
 
-// Basic styling for the news layout with scroll
 const styles = {
   newsWrapper: {
     textAlign: 'center',
@@ -79,9 +78,9 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '15px',
-    maxHeight: '500px', // Set the maximum height of the news container
-    overflowY: 'auto', // Enable vertical scroll when content exceeds height
-    padding: '10px', // Optional padding
+    maxHeight: '500px',
+    overflowY: 'auto',
+    padding: '10px', 
     border: '1px solid #ddd',
     borderRadius: '8px',
     backgroundColor: '#f9f9f9',

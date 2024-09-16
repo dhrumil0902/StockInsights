@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
-import './../App.css'
+import './../App.css';
+
 const StockSearch = ({ onSearch }) => {
-  // State for the actual ticker (used for search)
-  const [ticker, setTicker] = useState(() => {
+  // State for managing the input value
+  const [inputValue, setInputValue] = useState(() => {
     return localStorage.getItem('selectedTicker') || '';
   });
 
-  // State for managing the input value
-  const [inputValue, setInputValue] = useState(ticker);
-
   // Handle search submission (only update ticker when Enter or button is clicked)
   const handleSearch = (e) => {
-    e.preventDefault(); // Prevent form from submitting the traditional way
-    if (inputValue.trim()) {
-      const uppercaseTicker = inputValue.toUpperCase(); // Ensure ticker is in uppercase
-      setTicker(uppercaseTicker); // Update the ticker state
-      localStorage.setItem('selectedTicker', uppercaseTicker); // Save to localStorage
-      onSearch(uppercaseTicker); // Trigger the search with the entered ticker
+    e.preventDefault();
+
+    const uppercaseTicker = inputValue.trim().toUpperCase();
+
+    if (uppercaseTicker.length > 5) {
+      alert('Ticker must be 5 characters or less.');
+      return;
     }
+    if (/\d/.test(uppercaseTicker)) { 
+      alert('Ticker must not contain numbers.');
+      return;
+    }
+
+    localStorage.setItem('selectedTicker', uppercaseTicker);
+    onSearch(uppercaseTicker);
   };
 
-  // Handle input change but don't update the ticker yet
   const handleInputChange = (e) => {
-    setInputValue(e.target.value.toUpperCase()); // Update only the input value (not the ticker)
+    setInputValue(e.target.value);
   };
 
   return (
@@ -30,10 +35,10 @@ const StockSearch = ({ onSearch }) => {
       <form onSubmit={handleSearch}>
         <input
           type="text"
-          value={inputValue} // Bind input to inputValue state
-          onChange={handleInputChange} // Update inputValue on typing
-          placeholder="Enter stock ticker"
-          style={{ textTransform: 'uppercase' }} // Visually ensure uppercase
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="ticker"
+          style={{ textTransform: 'uppercase' }}
         />
         <button type="submit">🔍</button>
       </form>

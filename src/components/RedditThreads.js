@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './RedditThreads.css'; // Import the CSS file
+import './RedditThreads.css';
 
-const clientId = '9mxvBGQC4eEXhU_MskU7BA'; // Your API key (client ID)
-const clientSecret = 'GE0cQIbh15OqTvE4xuCy174PRGaq1A'; // Your client secret
+const clientId = '9mxvBGQC4eEXhU_MskU7BA';
+const clientSecret = 'GE0cQIbh15OqTvE4xuCy174PRGaq1A';
 
 // Function to get an access token from Reddit
 const getAccessToken = async () => {
@@ -31,7 +31,7 @@ const RedditThreads = ({ ticker }) => {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sortMethod, setSortMethod] = useState('hot'); // Default to 'hot'
+  const [sortMethod, setSortMethod] = useState('hot');
 
   useEffect(() => {
     const fetchRedditThreads = async () => {
@@ -77,13 +77,13 @@ const RedditThreads = ({ ticker }) => {
         <select
           value={sortMethod}
           onChange={(e) => setSortMethod(e.target.value)}
-          className="reddit-sort-dropdown" // Added class for styling
+          className="reddit-sort-dropdown"
         >
           <option value="hot">Trending</option>
           <option value="top">Most Upvoted</option>
           <option value="new">Most Recent</option>
         </select>
-        &nbsp; {/* Added non-breaking space here */}
+        &nbsp; {}
         Reddit Threads Related to ${ticker}
       </h3>
 
@@ -97,7 +97,7 @@ const RedditThreads = ({ ticker }) => {
               target="_blank"
               rel="noreferrer"
               key={thread.data.id}
-              style={{ textDecoration: 'none', color: 'inherit' }} // Remove underline and inherit color
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <li
                 style={{

@@ -5,11 +5,11 @@ import HighchartsReact from 'highcharts-react-official';
 
 const StockChart = ({ ticker }) => {
   const [chartOptions, setChartOptions] = useState(null);
-  const [interval, setInterval] = useState('1day'); // Default interval is daily
+  const [interval, setInterval] = useState('1day');
   const [loadingChart, setLoadingChart] = useState(true);
   const [loadingInfo, setLoadingInfo] = useState(true);
-  const [chartError, setChartError] = useState(false); // true/false instead of text
-  const [infoError, setInfoError] = useState(false); // true/false instead of text
+  const [chartError, setChartError] = useState(false);
+  const [infoError, setInfoError] = useState(false);
   const [stockInfo, setStockInfo] = useState({
     currentPrice: null,
     weekHigh: null,
@@ -22,7 +22,7 @@ const StockChart = ({ ticker }) => {
   // Fetch chart data from Twelve Data API
   useEffect(() => {
     const fetchChartData = async () => {
-      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Your Twelve Data API key
+      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606';
 
       try {
         // Request for stock price data with dynamic interval
@@ -32,7 +32,6 @@ const StockChart = ({ ticker }) => {
 
         const stockPriceData = stockPriceResponse.data.values.reverse();
 
-        // Update chartOptions with fetched price data
         const chartData = stockPriceData.map((data) => [
           new Date(data.datetime).getTime(),
           parseFloat(data.close),
@@ -60,12 +59,12 @@ const StockChart = ({ ticker }) => {
           },
         });
 
-        setChartError(false); // No error
+        setChartError(false);
       } catch (error) {
         console.error('Error fetching chart data:', error);
-        setChartError(true); // Set error flag
+        setChartError(true);
       } finally {
-        setLoadingChart(false); // Stop loading for the chart
+        setLoadingChart(false);
       }
     };
 
@@ -74,10 +73,9 @@ const StockChart = ({ ticker }) => {
     }
   }, [ticker, interval]);
 
-  // Fetch stock info from Twelve Data API
   useEffect(() => {
     const fetchStockInfo = async () => {
-      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606'; // Your Twelve Data API key
+      const apiKey = '1fd5ef43b97e46cd891f06aeba1f0606';
 
       try {
         // Request for additional stock info such as market cap, revenue, etc.
@@ -87,7 +85,6 @@ const StockChart = ({ ticker }) => {
 
         const stockInfoData = stockInfoResponse.data;
 
-        // Update the stock information, rounding values where needed
         setStockInfo({
           currentPrice: stockInfoData.close ? parseFloat(stockInfoData.close).toFixed(2) : 'N/A',
           weekHigh: stockInfoData.fifty_two_week.high ? parseFloat(stockInfoData.fifty_two_week.high).toFixed(2) : 'N/A',
@@ -97,10 +94,10 @@ const StockChart = ({ ticker }) => {
           average_volume: stockInfoData.average_volume ? Math.round(stockInfoData.average_volume) : 'N/A',
         });
 
-        setInfoError(false); // No error
+        setInfoError(false);
       } catch (error) {
         console.error('Error fetching stock info:', error);
-        setInfoError(true); // Set error flag
+        setInfoError(true); 
       } finally {
         setLoadingInfo(false); // Stop loading for the stock info
       }
@@ -113,7 +110,7 @@ const StockChart = ({ ticker }) => {
 
   return (
     <div className="chart-container">
-      {/* Chart Section */}
+      {}
       {loadingChart ? (
         <p>Loading chart data...</p>
       ) : chartError ? (
@@ -129,7 +126,7 @@ const StockChart = ({ ticker }) => {
         />
       ) : null}
 
-      {/* Stock Info Section */}
+      {}
       {loadingInfo ? (
         <p>Loading stock info...</p>
       ) : infoError ? (

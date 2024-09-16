@@ -40,20 +40,20 @@ header {
   background-color: #f9f9f9;
   border-radius: 15px;
   padding: 2%;
+  min-height: 550px; /* Ensure a minimum height */
+
 }
 
 /* Chart, news, and reddit containers share similar styles */
 
-.news-container,
+.news-container
 
 /* Ensure there's only one definition for watchlist-container */
-
-.reddit-threads-container {
+{
     background-color: #f9f9f9;
     border-radius: 8px;
-    height: auto;
     width: 100%;
-    text-align: 'center',
+    text-align: 'center';
 }
 
 
@@ -70,7 +70,11 @@ header {
   display: flex;
   flex-direction: column;
   height: 100%; /* Ensure the container takes up the parent's height */
-  background-color: black; /* Optional background */
+  background-color: #f9f9f9; /* Optional background */
+  min-height: 450px;
+  border-color: #f9f9f9;
+  padding: 3px;
+  border-radius: 10px;
 }
 
 .chart-content {
@@ -137,6 +141,10 @@ header {
     grid-column: 3 / 3;
     grid-row: 2 / 3;
     padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    width: 100%;
+    text-align: 'center';
 }
 
 
@@ -214,11 +222,13 @@ button:hover {
 .portfolio-container {
   background-color: #f9f9f9;
   border-radius: 15px;
-  padding: 2%;
+  padding: 1%;
   grid-column: 2 / 3;
   grid-row: 2 / 3;
   justify-content: center;
   text-align: center;
+  min-height: 600px;
+  max-height: 600px;
 }
 
 /* Input container for portfolio */
@@ -252,7 +262,7 @@ button:hover {
 
 .portfolio-table th, .portfolio-table td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
   border: none; /* Remove table borders */
   background: none; /* Remove background for cells */
 }
@@ -323,7 +333,7 @@ button:hover {
 
 /* Scrollable container for portfolio */
 .scrollable-portfolio-container {
-  max-height: 470px;
+  max-height: 470px;;
   overflow-y: auto;
 }
 
@@ -339,32 +349,76 @@ button:hover {
   cursor: pointer; /* Pointer cursor to indicate it's clickable */
 }
 
+.notes-container {
+  background-color: #f9f9f9;
+  border-radius: 15px;
+  padding: 2%;
+  padding-bottom: 1px;
+  grid-column: 1 / 2;
+  text-align: center;
+  max-width: 100%; /* Ensure it doesn't overflow beyond the container */
+}
+.notes-container h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.notes-container textarea {
+  width: 100%;
+  max-width: 100%; /* Ensure the textarea doesn't overflow */
+  height: 80%;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  resize: none; /* Disable resizing */
+  box-sizing: border-box; /* Ensure padding is included in the width */
+}
+.save-notes {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.save-notes:hover {
+  background-color: #0056b3;
+}
 
 
-@media (max-width: 950px) {
+
+@media (max-width: 1150px) {
     /* Make dashboard fully responsive on smaller screens */
-    @media (max-width: 950px) {
-      .dashboard {
-          display: grid;
-          grid-template-columns: 1fr; /* Stack columns vertically */
-          grid-template-rows: auto auto auto auto; /* Ensure each component has its own row */
-          gap: 20px;
-          width: 100%;
-      }
+    @media (max-width: 1150px) {
+.dashboard {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto;
+        gap: 20px;
+        width: 100%;
+    }
   
       /* Ensure full width for watchlist, chart, and news */
+      .portfolio-container,
       .watchlist-container,
       .chart-container,
       .news-container,
-      .reddit-threads-container 
-      .portfolio-container{
+      .reddit-threads-container,
+      .notes-container {
           width: 100%;
+          grid-column: 1 / 2;
       }
   
       .portfolio-container {
         grid-column: 1 / 2; /* Takes full width on mobile */
         overflow-x: auto;
-        grid-row: auto; /* Puts it in its own row */
+        grid-row: auto;
+        width: 100%; /* Puts it in its own row */
     }
       .watchlist-container {
           grid-column: 1 / 2;
@@ -378,6 +432,10 @@ button:hover {
           grid-column: 1 / 2;
           margin: 0;
       }
+
+      .notes-container {
+        grid-column: 1 / 2;
+    }
   
       .reddit-threads-container {
           grid-column: 1 / 2;
@@ -400,6 +458,40 @@ button:hover {
   
       .search-button {
           width: 25%; /* Take 25% of the width */
+      }
+      .input-container {
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center; /* Center align elements horizontally */
+        gap: 10px; /* Add space between input fields and button */
+        margin-bottom: 20px;
+        justify-content: center;
+      }
+    
+      .input-container input {
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        width: 150x; /* Ensure inputs take full width on mobile */
+        box-sizing: border-box;
+        background-color: white;
+        justify-content: center;
+      }
+    
+      .add-to-portfolio {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 150px; /* Ensure button takes full width on mobile */
+        box-sizing: border-box;
+      }
+    
+      .add-to-portfolio:hover {
+        background-color: #0056b3;
       }
   }
 }

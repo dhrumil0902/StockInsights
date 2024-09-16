@@ -22,7 +22,7 @@ const TrendingTweets = ({ ticker }) => {
         const sortedTweets = response.data.data.sort(
           (a, b) => b.public_metrics.retweet_count - a.public_metrics.retweet_count
         );
-        setTweets(sortedTweets); // Set the sorted tweets in state
+        setTweets(sortedTweets);
       } catch (error) {
         console.error('Error fetching tweets:', error);
       }
