@@ -121,7 +121,7 @@ const Portfolio = ({ onSelectTicker }) => {
 
   return (
     <div className="portfolio-container">
-      <h3>My Portfolio - Total Value: ${totalPortfolioValue.toFixed(2)}</h3>
+      <h3>Portfolio - Total Value: ${totalPortfolioValue.toFixed(2)}</h3>
       <div className="input-container">
         <input
           type="text"

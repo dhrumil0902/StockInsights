@@ -12,7 +12,7 @@ const StockNews = ({ ticker }) => {
         setLoading(true);
         setError(null);
 
-        const bingApiKey = process.env.REACT_APP_BING_API_KEY || '25cc9a76f7b947e4826067f2fa8c76ab';
+        const bingApiKey = process.env.REACT_APP_BING_API_KEY || '5acfb796a3a346dcae1f8621e03c8ff5';
         const response = await axios.get(
           `https://api.bing.microsoft.com/v7.0/news/search?q=${ticker}`, {
             headers: {

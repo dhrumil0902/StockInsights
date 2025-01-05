@@ -84,7 +84,7 @@ const App = () => {
 
         {}
         <div className="notes-container">
-          <h3>My Notes</h3>
+          <h3>Notes</h3>
           <textarea
             placeholder="Add your notes here..."
             value={notes}

@@ -81,7 +81,7 @@ const Watchlist = ({ onSelectTicker }) => {
 
   return (
     <div className="watchlist-container">
-      <h3 style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center' }}>My Watchlist</h3>
+      <h3 style={{ textAlign: 'center', alignItems: 'center', justifyContent: 'center' }}>Watchlist</h3>
       <div className="input-container">
         <input
           type="text"
